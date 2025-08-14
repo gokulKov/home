@@ -1,0 +1,276 @@
+/* CSS Variables */
+:root {
+  --primary: #ffb300;
+  --secondary: #e57373;
+  --accent: #81c784;
+  --bg: #fff8e1;
+  --text: #333;
+  --card: #fff3e0;
+  --footer: #ffe0b2;
+}
+
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Noto Sans Tamil', 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-bg {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 60% 20%, var(--primary) 0%, var(--bg) 70%);
+}
+
+.bg-shapes {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.18;
+  animation: float 8s ease-in-out infinite;
+}
+.shape1 {
+  width: 180px; height: 180px; background: var(--secondary);
+  top: 10%; left: 5%;
+  animation-delay: 0s;
+}
+.shape2 {
+  width: 120px; height: 120px; background: var(--accent);
+  top: 60%; left: 80%;
+  animation-delay: 2s;
+}
+.shape3 {
+  width: 90px; height: 90px; background: var(--primary);
+  top: 80%; left: 20%;
+  animation-delay: 4s;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.08); }
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem 1rem;
+  z-index: 1;
+  position: relative;
+}
+.hero-svg {
+  margin: 0 auto 1rem auto;
+  width: 120px;
+  height: 120px;
+}
+/* Modal Title */
+.modal-title {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 1.2rem;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+/* Name Input */
+.name-input {
+  width: 100%;
+  max-width: 350px;
+  padding: 1rem 1.2rem;
+  font-size: 1.2rem;
+  border-radius: 0.8rem;
+  border: 2px solid var(--accent);
+  margin-bottom: 1.5rem;
+  outline: none;
+  box-sizing: border-box;
+  background: #fffbe9;
+  color: var(--text);
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.name-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 4px 16px rgba(255,179,0,0.12);
+}
+/* Modal Button */
+.modal-content .rsvp-btn {
+  width: 100%;
+  max-width: 350px;
+  padding: 1rem 1.2rem;
+  font-size: 1.2rem;
+  border-radius: 0.8rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.modal-content .rsvp-btn:active {
+  background: var(--secondary);
+  transform: scale(0.97);
+}
+.welcome-anim {
+  text-align: center;
+  padding: 2rem 1rem 1.5rem 1rem;
+  z-index: 1;
+  position: relative;
+}
+.event-title {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+.event-hosts, .event-date, .event-venue {
+  font-size: 1.1rem;
+  margin: 0.3rem 0;
+}
+.countdown {
+  font-size: 1.1rem;
+  margin: 1rem 0 0.5rem 0;
+  color: var(--secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.countdown-en {
+  font-size: 0.95rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+.cta-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.2rem;
+}
+.rsvp-btn, .map-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.8rem 1.4rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.2s, transform 0.2s;
+  outline: none;
+}
+.rsvp-btn:active, .map-btn:active {
+  background: var(--secondary);
+  transform: scale(0.97);
+}
+
+.modal-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  max-width: 95vw;
+  width: 400px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  position: relative;
+}
+.close-btn {
+  position: absolute;
+  top: 0.7rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--secondary);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  justify-content: center;
+  margin: 2.5rem 0 1.5rem 0;
+}
+.gallery-card {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  font-size: 2.5rem;
+  user-select: none;
+}
+.gallery-emoji {
+  font-size: 2.5rem;
+}
+
+.footer {
+  background: var(--footer);
+  text-align: center;
+  padding: 1.2rem 0 1rem 0;
+  font-size: 1.1rem;
+  color: var(--secondary);
+  margin-top: 2rem;
+  border-top: 1px solid #ffe0b2;
+}
+.footer-en {
+  font-size: 0.95rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .event-card, .modal-content {
+    width: 95vw;
+    padding: 1rem;
+  }
+  .gallery-card {
+    width: 70px;
+    height: 70px;
+    font-size: 2rem;
+  }
+  .hero-svg {
+    width: 90px;
+    height: 90px;
+  }
+  .tamil-title {
+    font-size: 2rem;
+  }
+}
