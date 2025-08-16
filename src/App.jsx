@@ -695,8 +695,25 @@ export default function App() {
           {audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
         </button>
       </footer>
-      {/* Background audio (loop) */}
-      <audio ref={audioRef} src={bgAudioUrl} loop preload="auto" />
+      {/* Background audio (loop). Start muted autoplay (browsers allow muted autoplay),
+          then unmute on user gesture via the existing button or prompt. */}
+      <audio
+        ref={audioRef}
+        src={bgAudioUrl}
+        loop
+        preload="auto"
+        autoPlay
+        muted
+        playsInline
+        onCanPlay={() => {
+          // Try to start playback when the audio is ready. If the browser blocks
+          // audible autoplay, this will at least start the muted playback so the
+          // audio element is primed and can be unmuted on user interaction.
+          const a = audioRef.current;
+          if (a) a.play().catch(() => {});
+        }}
+        aria-hidden="true"
+      />
 
     </div>
   );
