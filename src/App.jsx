@@ -10,7 +10,7 @@ const WelcomeModal = ({ open, onSubmit, initialName }) => {
   React.useEffect(() => {
     if (open) setName(initialName || "");
   }, [initialName, open]);
-  if (!open) return null;
+  if (open) return null;
   return (
     <div className="modal-bg" role="dialog" aria-modal="true" aria-label="பெயர் உள்ளிடு">
       
