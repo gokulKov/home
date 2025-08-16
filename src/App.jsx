@@ -40,11 +40,19 @@ const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudi
           disablePictureInPicture
           controlsList="nodownload noplaybackrate noremoteplayback"
           onEnded={onEnded}
-          onPlay={onVideoPlay}
+          onPlay={() => {
+            // ensure background audio is unmuted and playing when intro plays
+            const a = document.querySelector('audio');
+            if (a) { a.muted = false; a.play().catch(() => {}); }
+            if (typeof onVideoPlay === 'function') onVideoPlay();
+          }}
         />
         {audioPrompt && (
           <button
-            onClick={onEnableAudio}
+            onClick={() => {
+              const a = audioRef.current; if (a) { a.muted = false; a.play().catch(() => {}); }
+              onEnableAudio();
+            }}
             aria-label="ஒலியை இயக்கு"
             style={{
               position: "absolute",
@@ -425,15 +433,22 @@ const MapModal = () => null;
 const formatEventDate = (isoString) => {
   try {
     const date = new Date(isoString);
-    return date.toLocaleDateString('ta-IN', {
+    // Date in Tamil (weekday, day month, year) and time with AM/PM (English)
+    const datePart = date.toLocaleDateString('ta-IN', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    }) + ' ' + date.toLocaleTimeString('ta-IN', {
-      hour: '2-digit',
-      minute: '2-digit'
     });
+  // Build time manually to ensure AM/PM is always present (some locales/devices
+  // may omit the meridiem when using toLocaleTimeString).
+  const hours24 = date.getHours();
+  const minutes = date.getMinutes();
+  const meridiem = hours24 >= 12 ? 'PM' : 'AM';
+  const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
+  const hh = String(hours12).padStart(2, '0');
+  const mm = String(minutes).padStart(2, '0');
+  return `${datePart}  ${hh}:${mm} ${meridiem}`;
   } catch {
     return "விரைவில்...";
   }
@@ -468,7 +483,12 @@ export default function App() {
   // Try to start audio on first interaction due to autoplay policies
   useEffect(() => {
     const resumeAudio = () => {
-      tryPlayAudio();
+      const a = audioRef.current;
+      if (a) {
+        a.muted = false; // unmute on user gesture
+        a.play().catch(() => {});
+      }
+      setAudioOn(true);
       window.removeEventListener('click', resumeAudio);
       window.removeEventListener('touchstart', resumeAudio);
     };
@@ -482,7 +502,10 @@ export default function App() {
 
   const tryPlayAudio = () => {
     const a = audioRef.current;
-    if (!a || !audioOn) return;
+    if (!a) return;
+    // Attempt to play regardless; browsers allow muted autoplay but may block
+    // audible playback until a user gesture. We try to play (muted or unmuted)
+    // and update the prompt state based on the result.
     a.play()
       .then(() => setAudioPrompt(false))
       .catch(() => setAudioPrompt(true));
@@ -689,7 +712,7 @@ export default function App() {
           onClick={() => {
             const next = !audioOn; setAudioOn(next);
             const a = audioRef.current; if (!a) return;
-            if (next) { a.play().catch(() => {}); } else { a.pause(); }
+            if (next) { a.muted = false; a.play().catch(() => {}); } else { a.muted = true; a.pause(); }
           }}
         >
           {audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
