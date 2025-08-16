@@ -7,6 +7,8 @@
   --text: #333;
   --card: #fff3e0;
   --footer: #ffe0b2;
+  /* JS sets this to 1dvh in px on mobile */
+  --app-dvh: 1vh;
 }
 
 body, html, #root {
@@ -132,6 +134,7 @@ body, html, #root {
 .event-hosts, .event-date, .event-venue {
   font-size: 1.1rem;
   margin: 0.3rem 0;
+  text-align: center;
 }
 .countdown {
   font-size: 1.1rem;
@@ -174,7 +177,7 @@ body, html, #root {
 
 .modal-bg {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0; left: 0; width: 100vw; height: 100dvh; height: calc(var(--app-dvh) * 100);
   background: rgba(0,0,0,0.18);
   display: flex;
   align-items: center;
@@ -190,6 +193,27 @@ body, html, #root {
   box-shadow: 0 8px 32px rgba(0,0,0,0.18);
   position: relative;
 }
+
+/* Fullscreen intro modal content */
+.intro-fullscreen {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100dvh; height: calc(var(--app-dvh) * 100);
+  padding: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden;
+  background: #000 !important;
+}
+.intro-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover; /* fill screen */
+  background: #000;
+}
+
+/* Avoid background scroll while video is open */
+body.no-scroll { overflow: hidden; }
 .close-btn {
   position: absolute;
   top: 0.7rem;
