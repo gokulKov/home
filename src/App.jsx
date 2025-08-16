@@ -5,18 +5,7 @@ import "./styles.css";
 import introVideo from "./VID_20250816_111840_471_bsl (1).mp4";
 import bgAudioUrl from "./hindu-temple-calm-instrumental-music-252547.mp3";
 
-const WelcomeModal = ({ open, onSubmit, initialName }) => {
-  const [name, setName] = React.useState(initialName || "");
-  React.useEffect(() => {
-    if (open) setName(initialName || "");
-  }, [initialName, open]);
-  if (open) return null;
-  return (
-    <div className="modal-bg" role="dialog" aria-modal="true" aria-label="பெயர் உள்ளிடு">
-      
-    </div>
-  );
-};
+// WelcomeModal removed — greeting will be shown directly after intro ends.
 
 // Intro video modal: plays once on load and closes automatically when ended
 const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudio }) => {
@@ -453,7 +442,6 @@ const formatEventDate = (isoString) => {
 export default function App() {
   const [countdown, setCountdown] = useState(getCountdown(EVENT_DATE));
   const [introOpen, setIntroOpen] = useState(true);
-  const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [guestName, setGuestName] = useState("");
   const [greetOpen, setGreetOpen] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
@@ -519,15 +507,14 @@ export default function App() {
   // Handle name submission from WelcomeModal
   const handleNameSubmit = (name) => {
   setGuestName(name);
-  setWelcomeOpen(false);
   setGreetOpen(true);
   };
 
   const handleIntroEnded = () => {
   setIntroOpen(false);
-  setWelcomeOpen(true);
-  // prefill name input with 'popp' when intro finishes
+  // directly open greeting and prefill guest name with 'popp'
   setGuestName("popp");
+  setGreetOpen(true);
   tryPlayAudio();
   };
 
@@ -684,14 +671,14 @@ export default function App() {
           {/* New: Contact Info */}
          
         </motion.section>
-        <IntroVideoModal
+  <IntroVideoModal
           open={introOpen}
           onEnded={handleIntroEnded}
           onVideoPlay={() => { if (audioOn) tryPlayAudio(); }}
           audioPrompt={audioPrompt}
           onEnableAudio={() => { setAudioOn(true); tryPlayAudio(); }}
         />
-  <WelcomeModal open={welcomeOpen} onSubmit={handleNameSubmit} initialName={guestName} />
+        
         
       </main>
       <footer className="footer" aria-label="Footer">
