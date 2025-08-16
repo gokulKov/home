@@ -2,32 +2,18 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import "./styles.css";
-import introVideo from "./lv_0_20250814143730.mp4";
+import introVideo from "./VID_20250816_111840_471_bsl (1).mp4";
 import bgAudioUrl from "./hindu-temple-calm-instrumental-music-252547.mp3";
 
-const WelcomeModal = ({ open, onSubmit }) => {
-  const [name, setName] = React.useState("");
+const WelcomeModal = ({ open, onSubmit, initialName }) => {
+  const [name, setName] = React.useState(initialName || "");
+  React.useEffect(() => {
+    if (open) setName(initialName || "");
+  }, [initialName, open]);
   if (!open) return null;
   return (
-  <div className="modal-bg" role="dialog" aria-modal="true" aria-label="பெயர் உள்ளிடு">
-      <div className="modal-content">
-        <h2 className="modal-title">உங்கள் பெயரை உள்ளிடவும்</h2>
-        <input
-          className="name-input"
-          type="text"
-          placeholder="பெயர் / Name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-      aria-label="உங்கள் பெயரை உள்ளிடவும்"
-        />
-        <button
-          className="rsvp-btn"
-          onClick={() => name && onSubmit(name)}
-      aria-label="பெயரை சமர்ப்பிக்கவும்"
-        >
-      சமர்ப்பி
-        </button>
-      </div>
+    <div className="modal-bg" role="dialog" aria-modal="true" aria-label="பெயர் உள்ளிடு">
+      
     </div>
   );
 };
@@ -40,7 +26,6 @@ const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudi
       document.documentElement.style.setProperty('--app-dvh', dvhPx + 'px');
     };
     if (open) {
-      document.body.classList.add('no-scroll');
       setDVH();
       window.addEventListener('resize', setDVH);
       window.addEventListener('orientationchange', setDVH);
@@ -121,6 +106,7 @@ const GreetingModal = ({ open, name, onClose }) => {
           தாங்கள் கலந்து கொண்டு விழாவை சிறப்பிக்கவும்.
         </p>
         <button className="rsvp-btn" onClick={onClose} aria-label="வரவேற்பை மூடு">Close</button>
+    <button className="rsvp-btn" onClick={onClose} aria-label="வரவேற்பை மூடு">மூடு</button>
       </div>
     </div>
   );
@@ -143,7 +129,7 @@ const countdownStyles = {
     flexWrap: "wrap"
   },
   box: {
-    background: "rgba(255, 255, 255, 0.18)",
+  background: "rgba(255, 255, 255, 0.92)",
     border: "1px solid rgba(255, 255, 255, 0.35)",
     borderRadius: 16,
     padding: "14px 18px",
@@ -156,21 +142,21 @@ const countdownStyles = {
   value: {
     fontSize: 40,
     fontWeight: 800,
-    color: "#FFFFFF",
+  color: "#2e3a3f",
     fontVariantNumeric: "tabular-nums",
     lineHeight: 1
   },
   label: {
     fontSize: 11,
     marginTop: 6,
-    color: "rgba(255,255,255,0.9)",
+  color: "rgba(46,58,63,0.9)",
     letterSpacing: 1.2,
     textTransform: "uppercase"
   },
   sep: {
     fontSize: 40,
     fontWeight: 700,
-    color: "rgba(255,255,255,0.7)",
+  color: "rgba(46,58,63,0.85)",
     lineHeight: 1,
     transform: "translateY(-2px)",
     userSelect: "none"
@@ -223,7 +209,7 @@ const contactStyles = {
     flexDirection: "column",
     alignItems: "center",
     gap: 8,
-    padding: "18px 22px",
+    padding: "18px 2px",
     background: "#ffd675",
     borderRadius: 10,
     border: "1px solid #e6f0fa",
@@ -237,8 +223,8 @@ const contactStyles = {
   },
   left: { display: "flex", flexDirection: "column", alignItems: "center", gap: 8, flex: 'none' },
   text: { display: "flex", flexDirection: "column", alignItems: "center" },
-  name: { fontSize: 15, fontWeight: 800, color: "#023e8a", lineHeight: 1, textAlign: "center" },
-  phone: { fontSize: 13, color: "#0277bd", textDecoration: "none", fontWeight: 600, marginTop: 6, textAlign: "center" },
+  name: { fontSize: 17, fontWeight: 800, color: "#023e8a", lineHeight: 1, textAlign: "center" },
+  phone: { fontSize: 15, color: "#0277bd", textDecoration: "none", fontWeight: 600, marginTop: 6, textAlign: "center" },
   actions: { display: "flex", alignItems: "center", gap: 8, marginLeft: 12 },
   waIcon: {
     padding: 8,
@@ -260,7 +246,7 @@ const eventDetailsStyles = {
     margin: "0 auto 20px"
   },
   hosts: {
-    fontSize: 24,
+    fontSize: 44,
     fontWeight: 700,
     color: "#2e3a3f",
     marginBottom: 12,
@@ -268,14 +254,15 @@ const eventDetailsStyles = {
   },
   // English host should visually match the Tamil host styling
   hostsEn: {
-    fontSize: 24,
+    fontSize: 44,
     fontWeight: 700,
     color: "#2e3a3f",
     marginBottom: 12,
-    textShadow: "0 1px 2px rgba(0,0,0,0.1)"
+  textShadow: "0 1px 2px rgba(0,0,0,0.1)",
+  fontFamily: "'Costaline', 'Merriweather', 'Noto Serif', serif"
   },
   venue: {
-    fontSize: 16,
+    fontSize: 19,
     color: "#37474f",
     lineHeight: 1.4,
     marginBottom: 8,
@@ -285,7 +272,7 @@ const eventDetailsStyles = {
   },
   // English venue should visually match the Tamil venue styling
   venueEn: {
-    fontSize: 16,
+    fontSize: 19,
     color: "#37474f",
     lineHeight: 1.4,
     marginTop: 6,
@@ -522,7 +509,7 @@ export default function App() {
     });
     window.open(
       `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
-        "வணக்கம்! Gruhapravesam RSVP for " + HOSTS
+        "வணக்கம்! Gruhapravesam for " + HOSTS
       )}`,
       "_blank"
     );
@@ -537,8 +524,10 @@ export default function App() {
   };
 
   const handleIntroEnded = () => {
-    setIntroOpen(false);
-    setWelcomeOpen(true);
+  setIntroOpen(false);
+  setWelcomeOpen(true);
+  // prefill name input with 'popp' when intro finishes
+  setGuestName("popp");
   tryPlayAudio();
   };
 
@@ -558,10 +547,10 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="tamil-title">கிருஹப்பிரவேசம் விழா</h1>
+          <h1 className="tamil-title"><span className="tamil-first">கிருஹப்பிரவேசம்</span> <span className="tamil-second">விழா</span></h1>
           
           {/* Enhanced event details */}
-          <div style={eventDetailsStyles.container}>
+          <div className="event-details" style={eventDetailsStyles.container}>
             <motion.div 
               style={eventDetailsStyles.hosts}
               initial={{ opacity: 0, y: 20 }}
@@ -608,7 +597,7 @@ export default function App() {
               <span>தொடர்பு</span>
             </motion.div>
             
-            <div style={contactStyles.container}>
+            <div className="contacts" style={contactStyles.container}>
               {CONTACTS.map((contact, index) => (
                 <motion.div
                   key={contact.phone}
@@ -702,6 +691,7 @@ export default function App() {
           audioPrompt={audioPrompt}
           onEnableAudio={() => { setAudioOn(true); tryPlayAudio(); }}
         />
+  <WelcomeModal open={welcomeOpen} onSubmit={handleNameSubmit} initialName={guestName} />
         
       </main>
       <footer className="footer" aria-label="Footer">
