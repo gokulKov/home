@@ -40,11 +40,32 @@ const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudi
           disablePictureInPicture
           controlsList="nodownload noplaybackrate noremoteplayback"
           onEnded={onEnded}
-          onPlay={() => {
-            // ensure background audio is unmuted and playing when intro plays
+          onPlay={(e) => {
+            // Only unmute/play background audio if the play was initiated by the user.
+            // Some browsers fire autoplayed play events that are not user gestures and
+            // won't allow audible playback. e.isTrusted === true indicates a real user action.
+            try {
+              if (e && e.isTrusted) {
+                const a = document.querySelector('audio');
+                if (a) { a.muted = false; a.play().catch(() => {}); }
+                // also mark app-level audio state
+                try { if (typeof window !== 'undefined' && window.__app_unmute) window.__app_unmute(); } catch {}
+              }
+            } catch (err) {
+              // ignore
+            }
+            if (typeof onVideoPlay === 'function') onVideoPlay(e);
+          }}
+          onClick={() => {
+            // Treat a tap as a user gesture: unmute/play background audio
             const a = document.querySelector('audio');
             if (a) { a.muted = false; a.play().catch(() => {}); }
-            if (typeof onVideoPlay === 'function') onVideoPlay();
+            try { if (typeof window !== 'undefined' && window.__app_unmute) window.__app_unmute(); } catch {}
+          }}
+          onTouchStart={() => {
+            const a = document.querySelector('audio');
+            if (a) { a.muted = false; a.play().catch(() => {}); }
+            try { if (typeof window !== 'undefined' && window.__app_unmute) window.__app_unmute(); } catch {}
           }}
         />
         {audioPrompt && (
@@ -89,7 +110,7 @@ const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudi
 };
 
 // Greeting modal shown after name submission
-const GreetingModal = ({ open, name, onClose }) => {
+const GreetingModal = ({ open, name, onClose, onEnter }) => {
   if (!open) return null;
   return (
     <div className="modal-bg" role="dialog" aria-modal="true" aria-label="வரவேற்பு செய்தி">
@@ -99,8 +120,10 @@ const GreetingModal = ({ open, name, onClose }) => {
         <p style={{ marginTop: 8, color: "#6d4c41" }}>
           தாங்கள் கலந்து கொண்டு விழாவை சிறப்பிக்கவும்.
         </p>
-        <button className="rsvp-btn" onClick={onClose} aria-label="வரவேற்பை மூடு">Close</button>
-    <button className="rsvp-btn" onClick={onClose} aria-label="வரவேற்பை மூடு">மூடு</button>
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 12 }}>
+          <button className="rsvp-btn" onClick={onEnter} aria-label="உள்கொள்ள">Enter</button>
+          <button className="rsvp-btn" onClick={onClose} aria-label="வரவேற்பை மூடு">மூடு</button>
+        </div>
       </div>
     </div>
   );
@@ -486,6 +509,18 @@ export default function App() {
     };
   }, [audioOn]);
 
+  // Provide a global hook so non-React event handlers (video onClick/onPlay)
+  // can notify React to update its audio state.
+  useEffect(() => {
+    try {
+      window.__app_unmute = () => {
+        setAudioOn(true);
+        setAudioEnabled(true);
+      };
+    } catch (e) {}
+    return () => { try { delete window.__app_unmute; } catch (e) {} };
+  }, []);
+
   useEffect(() => {
     confetti({
       particleCount: 120,
@@ -569,6 +604,19 @@ export default function App() {
   const handleNameSubmit = (name) => {
   setGuestName(name);
   setGreetOpen(true);
+  };
+
+  const handleEnter = () => {
+    // user gesture: open intro modal, then play background audio and intro video together
+    setGreetOpen(false);
+    setIntroOpen(true);
+    // after modal mounts, unmute and play both audio and video
+    setTimeout(() => {
+      const a = audioRef.current;
+      const vid = document.querySelector('.intro-video');
+      if (a) { a.muted = false; a.play().catch(() => {}); setAudioOn(true); setAudioEnabled(true); }
+      if (vid) { vid.muted = false; vid.play().catch(() => {}); }
+    }, 120);
   };
 
   const handleIntroEnded = () => {

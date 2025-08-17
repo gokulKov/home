@@ -12,3 +12,4 @@ foreach ($p in $possible) {
 }
 # fallback
 Start-Process $URL
+# If Chrome is not found, open the URL in the default browser
