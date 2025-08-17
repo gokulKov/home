@@ -49,10 +49,7 @@ const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudi
         />
         {audioPrompt && (
           <button
-            onClick={() => {
-              const a = audioRef.current; if (a) { a.muted = false; a.play().catch(() => {}); }
-              onEnableAudio();
-            }}
+            onClick={onEnableAudio}
             aria-label="ஒலியை இயக்கு"
             style={{
               position: "absolute",
@@ -462,10 +459,32 @@ export default function App() {
   const [audioOn, setAudioOn] = useState(true);
   const audioRef = React.useRef(null);
   const [audioPrompt, setAudioPrompt] = useState(false);
-  // Add: local pooja timer state/effect
-  const [showPoojaTimer, setShowPoojaTimer] = useState(false);
-  const POOJA_TIME = EVENT_DATE; // use same target as main countdown
-  const [poojaCountdown, setPoojaCountdown] = useState(getCountdown(POOJA_TIME));
+  const [audioEnabled, setAudioEnabled] = useState(false);
+
+  // Add: global overlay state
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  // Directly set overlay state in resume handler
+  useEffect(() => {
+    const resumeAudio = () => {
+      const a = audioRef.current;
+      if (a) {
+        a.muted = false; // unmute on user gesture
+        a.play().catch(() => {});
+      }
+      setAudioOn(true);
+      setAudioEnabled(true);
+      setShowOverlay(false); // hide overlay on resume
+      window.removeEventListener('click', resumeAudio);
+      window.removeEventListener('touchstart', resumeAudio);
+    };
+    window.addEventListener('click', resumeAudio, { once: true });
+    window.addEventListener('touchstart', resumeAudio, { once: true });
+    return () => {
+      window.removeEventListener('click', resumeAudio);
+      window.removeEventListener('touchstart', resumeAudio);
+    };
+  }, [audioOn]);
 
   useEffect(() => {
     confetti({
@@ -489,6 +508,7 @@ export default function App() {
         a.play().catch(() => {});
       }
       setAudioOn(true);
+      setAudioEnabled(true);
       window.removeEventListener('click', resumeAudio);
       window.removeEventListener('touchstart', resumeAudio);
     };
@@ -509,6 +529,24 @@ export default function App() {
     a.play()
       .then(() => setAudioPrompt(false))
       .catch(() => setAudioPrompt(true));
+  };
+
+  // Floating control: reliable user-gesture to start/stop background music
+  const toggleFloatingAudio = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    // If currently paused or muted, unmute and play
+    if (a.paused || a.muted) {
+      a.muted = false;
+      a.play().catch(() => {});
+      setAudioOn(true);
+      setAudioEnabled(true);
+      setAudioPrompt(false);
+    } else {
+      a.pause();
+      a.muted = true;
+      setAudioOn(false);
+    }
   };
 
   const handleRSVP = () => {
@@ -541,16 +579,12 @@ export default function App() {
   tryPlayAudio();
   };
 
-  // Update: add effect for pooja timer
-  useEffect(() => {
-    if (!showPoojaTimer) return;
-    const t = setInterval(() => setPoojaCountdown(getCountdown(POOJA_TIME)), 1000);
-    return () => clearInterval(t);
-  }, [showPoojaTimer]);
+  // (Pooja timer handled inside Gallery component; no App-level effect needed)
 
   return (
     <div className="app-bg">
       <main className="main-content" aria-label="Main Content">
+  {/* overlay removed: app will attempt autoplay/unmute programmatically without asking */}
         <motion.section
           className="event-card"
           initial={{ opacity: 0, y: 40 }}
@@ -718,6 +752,29 @@ export default function App() {
           {audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
         </button>
       </footer>
+      {/* Floating play/pause button */}
+      <button
+        onClick={toggleFloatingAudio}
+        aria-label={audioOn ? 'Pause music' : 'Play music'}
+        style={{
+          position: 'fixed',
+          right: 16,
+          bottom: 16,
+          width: 56,
+          height: 56,
+          borderRadius: 28,
+          background: audioOn ? '#ffb300' : '#fff',
+          border: '1px solid rgba(0,0,0,0.08)',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.12)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 1000
+        }}
+      >
+        <span style={{ fontSize: 20 }}>{audioOn ? '🔊' : '🔈'}</span>
+      </button>
       {/* Background audio (loop). Start muted autoplay (browsers allow muted autoplay),
           then unmute on user gesture via the existing button or prompt. */}
       <audio
