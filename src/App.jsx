@@ -2,112 +2,12 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import "./styles.css";
-import introVideo from "./VID_20250816_111840_471_bsl (1).mp4";
+// intro video removed per request
 import bgAudioUrl from "./hindu-temple-calm-instrumental-music-252547.mp3";
 
 // WelcomeModal removed — greeting will be shown directly after intro ends.
 
-// Intro video modal: plays once on load and closes automatically when ended
-const IntroVideoModal = ({ open, onEnded, onVideoPlay, audioPrompt, onEnableAudio }) => {
-  React.useEffect(() => {
-    const setDVH = () => {
-      const dvhPx = (window.visualViewport ? window.visualViewport.height : window.innerHeight) / 100;
-      document.documentElement.style.setProperty('--app-dvh', dvhPx + 'px');
-    };
-    if (open) {
-      setDVH();
-      window.addEventListener('resize', setDVH);
-      window.addEventListener('orientationchange', setDVH);
-    }
-    return () => {
-      document.body.classList.remove('no-scroll');
-      window.removeEventListener('resize', () => {});
-      window.removeEventListener('orientationchange', () => {});
-    };
-  }, [open]);
-  if (!open) return null;
-  return (
-    <div className="modal-bg" style={{ background: "#000" }} role="dialog" aria-modal="true" aria-label="அறிமுக வீடியோ">
-      <div className="modal-content intro-fullscreen" style={{ position: "relative" }}>
-        <video
-          className="intro-video"
-          src={introVideo}
-          autoPlay
-          muted
-          playsInline
-          webkit-playsinline="true"
-          controls={false}
-          disablePictureInPicture
-          controlsList="nodownload noplaybackrate noremoteplayback"
-          onEnded={onEnded}
-          onPlay={(e) => {
-            // Only unmute/play background audio if the play was initiated by the user.
-            // Some browsers fire autoplayed play events that are not user gestures and
-            // won't allow audible playback. e.isTrusted === true indicates a real user action.
-            try {
-              if (e && e.isTrusted) {
-                const a = document.querySelector('audio');
-                if (a) { a.muted = false; a.play().catch(() => {}); }
-                // also mark app-level audio state
-                try { if (typeof window !== 'undefined' && window.__app_unmute) window.__app_unmute(); } catch {}
-              }
-            } catch (err) {
-              // ignore
-            }
-            if (typeof onVideoPlay === 'function') onVideoPlay(e);
-          }}
-          onClick={() => {
-            // Treat a tap as a user gesture: unmute/play background audio
-            const a = document.querySelector('audio');
-            if (a) { a.muted = false; a.play().catch(() => {}); }
-            try { if (typeof window !== 'undefined' && window.__app_unmute) window.__app_unmute(); } catch {}
-          }}
-          onTouchStart={() => {
-            const a = document.querySelector('audio');
-            if (a) { a.muted = false; a.play().catch(() => {}); }
-            try { if (typeof window !== 'undefined' && window.__app_unmute) window.__app_unmute(); } catch {}
-          }}
-        />
-        {audioPrompt && (
-          <button
-            onClick={onEnableAudio}
-            aria-label="ஒலியை இயக்கு"
-            style={{
-              position: "absolute",
-              bottom: 16,
-              left: 16,
-              background: "rgba(0,0,0,0.55)",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.4)",
-              padding: "10px 14px",
-              borderRadius: 8,
-              cursor: "pointer"
-            }}
-          >
-            ஒலி இயக்கு
-          </button>
-        )}
-        <button
-          onClick={onEnded}
-          aria-label="வீடியோவை தவிர்க்க"
-          style={{
-            position: "absolute",
-            top: 12,
-            right: 12,
-            background: "rgba(0,0,0,0.5)",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.4)",
-            padding: "8px 12px",
-            borderRadius: 8,
-            cursor: "pointer"
-          }}
-        >
-          தவிர்க்க
-        </button>
-      </div>
-    </div>
-  );
-};
+// Intro video removed — simplified flow per request
 
 // Greeting modal shown after name submission
 const GreetingModal = ({ open, name, onClose, onEnter }) => {
@@ -476,7 +376,7 @@ const formatEventDate = (isoString) => {
 
 export default function App() {
   const [countdown, setCountdown] = useState(getCountdown(EVENT_DATE));
-  const [introOpen, setIntroOpen] = useState(true);
+  // intro flow removed; no intro video modal
   const [guestName, setGuestName] = useState("");
   const [greetOpen, setGreetOpen] = useState(false);
   const [audioOn, setAudioOn] = useState(true);
@@ -486,6 +386,21 @@ export default function App() {
 
   // Add: global overlay state
   const [showOverlay, setShowOverlay] = useState(false);
+
+  // homepage to open when ribbon is clicked
+  const HOMEPAGE = "https://gokulkov.github.io/home/";
+  const [showRibbon, setShowRibbon] = useState(false);
+
+  const openHomepageWithRibbon = () => {
+    // show ribbon animation, then open homepage in new tab
+    setShowRibbon(true);
+    // open after short delay to allow ribbon open animation
+    setTimeout(() => {
+      try { window.open(HOMEPAGE, '_blank'); } catch (e) {}
+    }, 650);
+    // hide ribbon after animation finishes
+    setTimeout(() => setShowRibbon(false), 1600);
+  };
 
   // Directly set overlay state in resume handler
   useEffect(() => {
@@ -607,21 +522,16 @@ export default function App() {
   };
 
   const handleEnter = () => {
-    // user gesture: open intro modal, then play background audio and intro video together
+    // simplified: just close greeting and try to play audio
     setGreetOpen(false);
-    setIntroOpen(true);
-    // after modal mounts, unmute and play both audio and video
     setTimeout(() => {
       const a = audioRef.current;
-      const vid = document.querySelector('.intro-video');
       if (a) { a.muted = false; a.play().catch(() => {}); setAudioOn(true); setAudioEnabled(true); }
-      if (vid) { vid.muted = false; vid.play().catch(() => {}); }
     }, 120);
   };
 
   const handleIntroEnded = () => {
-  setIntroOpen(false);
-  // directly open greeting and prefill guest name with 'popp'
+  // no intro; keep existing greeting flow minimal
   setGuestName("popp");
   setGreetOpen(true);
   tryPlayAudio();
@@ -717,11 +627,12 @@ export default function App() {
                   </div>
 
                   <div style={contactStyles.actions} aria-hidden="true" aria-label="no contact actions">
-                    {/* WhatsApp icon removed */}
+                    {/* no extra actions */}
                   </div>
                 </motion.div>
               ))}
             </div>
+
           </div>
 
           <div
@@ -775,19 +686,21 @@ export default function App() {
 
           {/* New: Contact Info */}
          
-        </motion.section>
-  <IntroVideoModal
-          open={introOpen}
-          onEnded={handleIntroEnded}
-          onVideoPlay={() => { if (audioOn) tryPlayAudio(); }}
-          audioPrompt={audioPrompt}
-          onEnableAudio={() => { setAudioOn(true); tryPlayAudio(); }}
-        />
-        
-        
+  </motion.section>
       </main>
+      {/* ribbon that briefly appears when opening external homepage */}
+      {showRibbon && (
+        <div aria-hidden style={{position: 'fixed', left: 0, right: 0, top: 0, height: 120, background: '#ffb300', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, boxShadow: '0 6px 18px rgba(0,0,0,0.12)'}}>
+          <div style={{transform: 'translateY(0)', opacity: 1, transition: 'transform 0.4s ease, opacity 0.4s ease'}}>
+            <strong style={{fontSize: 18}}>Opening website…</strong>
+          </div>
+        </div>
+      )}
+
       <footer className="footer" aria-label="Footer">
         Made with <span aria-label="love">❤️</span> | <span className="footer-en">Made with love</span>
+        
+        
         <button
           style={{ marginLeft: 12, padding: '6px 10px', borderRadius: 8, border: '1px solid #e0e0e0', cursor: 'pointer' }}
           aria-label={audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
@@ -798,6 +711,13 @@ export default function App() {
           }}
         >
           {audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
+        </button>
+        <button
+          onClick={openHomepageWithRibbon}
+          style={{ marginLeft: 8, padding: '6px 10px', borderRadius: 8, border: '1px solid #e0e0e0', cursor: 'pointer' }}
+          aria-label="Open homepage"
+        >
+          Open site
         </button>
       </footer>
       {/* Floating play/pause button */}
