@@ -4,6 +4,10 @@ import confetti from "canvas-confetti";
 import "./styles.css";
 // intro video removed per request
 import bgAudioUrl from "./hindu-temple-calm-instrumental-music-252547.mp3";
+import RibbonCutting from "./components/RibbonCutting";
+import TraditionalBackground from "./components/TraditionalBackground";
+import TraditionalParticles from "./components/TraditionalParticles";
+import CulturalElements from "./components/CulturalElements";
 
 // WelcomeModal removed — greeting will be shown directly after intro ends.
 
@@ -21,7 +25,7 @@ const GreetingModal = ({ open, name, onClose, onEnter }) => {
           தாங்கள் கலந்து கொண்டு விழாவை சிறப்பிக்கவும்.
         </p>
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 12 }}>
-          <button className="rsvp-btn" onClick={onEnter} aria-label="உள்கொள்ள">Enter</button>
+          <button className="rsvp-btn" onClick={onEnter} aria-label="உள்கொள்ள">Enter</button>
           <button className="rsvp-btn" onClick={onClose} aria-label="வரவேற்பை மூடு">மூடு</button>
         </div>
       </div>
@@ -29,11 +33,7 @@ const GreetingModal = ({ open, name, onClose, onEnter }) => {
   );
 };
 
-
-
 // GrandWelcome removed per request (hand image and extra step eliminated)
-
-
 
 // Minimal inline styles for better countdown UI (updated to glassmorphism)
 const countdownStyles = {
@@ -112,21 +112,21 @@ const actionRowStyles = {
 const contactStyles = {
   container: {
     display: "flex",
-    gap: 12,
+    gap: 20,
     marginTop: 16,
-    width: "100%",
+    width: "75%",
     maxWidth: 900,
     marginLeft: "auto",
     marginRight: "auto",
-  justifyContent: "space-between",
-  flexWrap: "nowrap"
+    justifyContent: "center",
+    flexWrap: "wrap"
   },
   item: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     gap: 8,
-    padding: "18px 2px",
+    padding: "24px 16px",
     background: "#ffd675",
     borderRadius: 10,
     border: "1px solid #e6f0fa",
@@ -140,8 +140,8 @@ const contactStyles = {
   },
   left: { display: "flex", flexDirection: "column", alignItems: "center", gap: 8, flex: 'none' },
   text: { display: "flex", flexDirection: "column", alignItems: "center" },
-  name: { fontSize: 17, fontWeight: 800, color: "#023e8a", lineHeight: 1, textAlign: "center" },
-  phone: { fontSize: 15, color: "#0277bd", textDecoration: "none", fontWeight: 600, marginTop: 6, textAlign: "center" },
+  name: { fontSize: 20, fontWeight: 800, color: "#023e8a", lineHeight: 1, textAlign: "center" },
+  phone: { fontSize: 18, color: "#0277bd", textDecoration: "none", fontWeight: 600, marginTop: 6, textAlign: "center" },
   actions: { display: "flex", alignItems: "center", gap: 8, marginLeft: 12 },
   waIcon: {
     padding: 8,
@@ -387,9 +387,29 @@ export default function App() {
   // Add: global overlay state
   const [showOverlay, setShowOverlay] = useState(false);
 
+  // Add ribbon cutting animation state
+  const [showRibbonCutting, setShowRibbonCutting] = useState(true);
+  const [mainAppReady, setMainAppReady] = useState(false);
+
   // homepage to open when ribbon is clicked
   const HOMEPAGE = "https://gokulkov.github.io/home/";
   const [showRibbon, setShowRibbon] = useState(false);
+
+  const handleRibbonComplete = () => {
+    setShowRibbonCutting(false);
+    setMainAppReady(true);
+    // Start confetti after ribbon cutting
+    setTimeout(() => {
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ["#ffb300", "#e57373", "#81c784", "#64b5f6", "#ff6b9d"],
+        shapes: ["circle", "square"],
+        scalar: 1.2,
+      });
+    }, 300);
+  };
 
   const openHomepageWithRibbon = () => {
     // show ribbon animation, then open homepage in new tab
@@ -437,17 +457,19 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    confetti({
-      particleCount: 120,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ["#ffb300", "#e57373", "#81c784", "#64b5f6"],
-    });
-    const timer = setInterval(() => {
-      setCountdown(getCountdown(EVENT_DATE));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (mainAppReady) {
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#ffb300", "#e57373", "#81c784", "#64b5f6"],
+      });
+      const timer = setInterval(() => {
+        setCountdown(getCountdown(EVENT_DATE));
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [mainAppReady]);
 
   // Try to start audio on first interaction due to autoplay policies
   useEffect(() => {
@@ -514,7 +536,6 @@ export default function App() {
     );
   };
 
-
   // Handle name submission from WelcomeModal
   const handleNameSubmit = (name) => {
   setGuestName(name);
@@ -541,228 +562,247 @@ export default function App() {
 
   return (
     <div className="app-bg">
-      <main className="main-content" aria-label="Main Content">
-  {/* overlay removed: app will attempt autoplay/unmute programmatically without asking */}
-        <motion.section
-          className="event-card"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h1 className="tamil-title"><span className="tamil-first">கிருஹப்பிரவேசம்</span> <span className="tamil-second">விழா</span></h1>
-          
-          {/* Enhanced event details */}
-          <div className="event-details" style={eventDetailsStyles.container}>
-            <motion.div 
-              style={eventDetailsStyles.hosts}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              {HOSTS}
-            </motion.div>
-            
-
-            
-            <motion.div
-              style={eventDetailsStyles.venue}
-             // onClick={() => window.open(MAP_QUERY, "_blank")}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              whileHover={{ scale: 1.02 }}
-            >
-               {VENUE}
-            </motion.div>
-
-
-              <div style={eventDetailsStyles.hostsEn}>{HOSTS_EN}</div>
-              <div style={eventDetailsStyles.venueEn}>{VENUE_EN}</div>
-<br />
-            <motion.div
-              style={eventDetailsStyles.date}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              🗓️ {formatEventDate(EVENT_DATE)}
-            </motion.div>
-
-            {/* Enhanced contacts section */}
-            <motion.div
-              style={eventDetailsStyles.contactsHeader}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <span>📞</span>
-              <span>தொடர்பு</span>
-            </motion.div>
-            
-            <div className="contacts" style={contactStyles.container}>
-              {CONTACTS.map((contact, index) => (
-                <motion.div
-                  key={contact.phone}
-                  style={contactStyles.item}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.08 }}
-                  whileHover={{
-                    transform: "translateY(-4px)",
-                    boxShadow: "0 10px 28px rgba(2,136,209,0.12)"
-                  }}
-                >
-                  <div style={contactStyles.left}>
-                    {/* icon removed per request */}
-                    <div style={contactStyles.text}>
-                      <span style={contactStyles.name}>{contact.name}</span>
-                      <a
-                        href={`tel:+${contact.phone}`}
-                        style={contactStyles.phone}
-                        aria-label={`${contact.name} தொலைபேசி`}
-                      >
-                        {contact.display}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div style={contactStyles.actions} aria-hidden="true" aria-label="no contact actions">
-                    {/* no extra actions */}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-          </div>
-
-          <div
-            className="countdown"
-            role="timer"
-            aria-live="polite"
-            aria-label="கவுண்ட்டவுன்"
-            style={countdownStyles.container}
-          >
-            <TimeBox value={countdown.days} label="நாள்" />
-            <TimeSep />
-            <TimeBox value={countdown.hours} label="மணி" />
-            <TimeSep />
-            <TimeBox value={countdown.minutes} label="நிமி" />
-            <TimeSep />
-            <TimeBox value={countdown.seconds} label="வி" />
-          </div>
-
-          {/* Add: action row with WhatsApp + Pooja + Map */}
-          <div style={actionRowStyles.container} aria-label="இணை செயல்கள்">
-            <button
-              style={{ ...actionRowStyles.btn, borderColor: "#25D36633" }}
-              aria-label="வாட்ஸ்அப் RSVP"
-              onClick={handleRSVP}
-            >
-              <span style={actionRowStyles.iconWrap} aria-hidden="true">
-                {/* WhatsApp SVG */}
-                <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#25D366" d="M27.6 4.4A15.8 15.8 0 1 0 4.4 27.6L3 31l3.6-1.3A15.8 15.8 0 1 0 27.6 4.4Z"/>
-                  <path fill="#fff" d="M24.4 17.8c-.2-.3-1.1-.6-1.8-.7-.5-.1-1-.1-1.4.4-.4.5-1 1.2-1.2 1.3-.2.1-.6.2-1.1 0-.5-.2-2-1-3.7-2.9-1.4-1.6-1.8-2.9-2-3.4-.2-.5 0-.8.2-1 .2-.2.5-.6.7-.9.2-.3.3-.5.4-.8.1-.3 0-.6 0-.8 0-.2-.4-1.4-.8-2-.2-.5-.5-.6-.8-.6h-.7c-.2 0-.7.1-1.1.6-.4.5-1.4 1.3-1.4 3.2 0 1.9 1.4 3.7 1.6 3.9.2.3 2.8 4.4 6.8 6.2 4 .1 4.2.1 5.2-.4 1-.5 2.3-1.7 2.4-3 .1-1.3-.1-1.3-.1-1.3Z"/>
-                </svg>
-              </span>
-              <span>WhatsApp</span>
-            </button>
-           
-            {/* New: Map button */}
-            <button
-              style={{ ...actionRowStyles.btn, borderColor: "#64b5f633" }}
-              aria-label="வரைபடம் திறக்க"
-              onClick={() => window.open(MAP_QUERY, "_blank")}
-            >
-              <span style={actionRowStyles.iconWrap} aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 3C10.9 3 7 6.9 7 12c0 6.2 7.2 14.4 8.9 16.2.6.7 1.6.7 2.2 0C17.8 26.4 25 18.2 25 12c0-5.1-3.9-9-9-9Z" fill="#64b5f6"/>
-                  <circle cx="16" cy="12" r="3.5" fill="#fff"/>
-                </svg>
-              </span>
-              <span>வரைபடம்</span>
-            </button>
-          </div>
-
-          {/* New: Contact Info */}
-         
-  </motion.section>
-      </main>
-      {/* ribbon that briefly appears when opening external homepage */}
-      {showRibbon && (
-        <div aria-hidden style={{position: 'fixed', left: 0, right: 0, top: 0, height: 120, background: '#ffb300', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, boxShadow: '0 6px 18px rgba(0,0,0,0.12)'}}>
-          <div style={{transform: 'translateY(0)', opacity: 1, transition: 'transform 0.4s ease, opacity 0.4s ease'}}>
-            <strong style={{fontSize: 18}}>Opening website…</strong>
-          </div>
-        </div>
+      {/* Ribbon Cutting Animation */}
+      {showRibbonCutting && (
+        <RibbonCutting onComplete={handleRibbonComplete} />
       )}
 
-      <footer className="footer" aria-label="Footer">
-        Made with <span aria-label="love">❤️</span> | <span className="footer-en">Made with love</span>
-        
-        
-        <button
-          style={{ marginLeft: 12, padding: '6px 10px', borderRadius: 8, border: '1px solid #e0e0e0', cursor: 'pointer' }}
-          aria-label={audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
-          onClick={() => {
-            const next = !audioOn; setAudioOn(next);
-            const a = audioRef.current; if (!a) return;
-            if (next) { a.muted = false; a.play().catch(() => {}); } else { a.muted = true; a.pause(); }
-          }}
-        >
-          {audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
-        </button>
-        <button
-          onClick={openHomepageWithRibbon}
-          style={{ marginLeft: 8, padding: '6px 10px', borderRadius: 8, border: '1px solid #e0e0e0', cursor: 'pointer' }}
-          aria-label="Open homepage"
-        >
-          Open site
-        </button>
-      </footer>
-      {/* Floating play/pause button */}
-      <button
-        onClick={toggleFloatingAudio}
-        aria-label={audioOn ? 'Pause music' : 'Play music'}
-        style={{
-          position: 'fixed',
-          right: 16,
-          bottom: 16,
-          width: 56,
-          height: 56,
-          borderRadius: 28,
-          background: audioOn ? '#ffb300' : '#fff',
-          border: '1px solid rgba(0,0,0,0.08)',
-          boxShadow: '0 6px 18px rgba(0,0,0,0.12)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          zIndex: 1000
-        }}
-      >
-        <span style={{ fontSize: 20 }}>{audioOn ? '🔊' : '🔈'}</span>
-      </button>
-      {/* Background audio (loop). Start muted autoplay (browsers allow muted autoplay),
-          then unmute on user gesture via the existing button or prompt. */}
-      <audio
-        ref={audioRef}
-        src={bgAudioUrl}
-        loop
-        preload="auto"
-        autoPlay
-        muted
-        playsInline
-        onCanPlay={() => {
-          // Try to start playback when the audio is ready. If the browser blocks
-          // audible autoplay, this will at least start the muted playback so the
-          // audio element is primed and can be unmuted on user interaction.
-          const a = audioRef.current;
-          if (a) a.play().catch(() => {});
-        }}
-        aria-hidden="true"
-      />
+      {/* Main App Content */}
+      {mainAppReady && (
+        <>
+          {/* Traditional Background Patterns */}
+          <TraditionalBackground />
+          
+          {/* Particle Effects */}
+          <TraditionalParticles />
+          
+          {/* Cultural Elements */}
+          <CulturalElements />
 
+          <main className="main-content" aria-label="Main Content">
+            <motion.section
+              className="event-card"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="tamil-title"><span className="tamil-first">கிருஹப்பிரவேசம்</span> <span className="tamil-second">விழா</span></h1>
+              
+              {/* Enhanced event details */}
+              <div className="event-details" style={eventDetailsStyles.container}>
+                <motion.div 
+                  style={eventDetailsStyles.hosts}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  {HOSTS}
+                </motion.div>
+                
+                <motion.div
+                  style={eventDetailsStyles.venue}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                   {VENUE}
+                </motion.div>
+
+                <div style={eventDetailsStyles.hostsEn}>{HOSTS_EN}</div>
+                <div style={eventDetailsStyles.venueEn}>{VENUE_EN}</div>
+                <br />
+                
+                <motion.div
+                  style={eventDetailsStyles.date}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  🗓️ {formatEventDate(EVENT_DATE)}
+                </motion.div>
+
+                {/* Enhanced contacts section */}
+                <motion.div
+                  style={eventDetailsStyles.contactsHeader}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <span>📞</span>
+                  <span>தொடர்பு</span>
+                </motion.div>
+                
+                <div className="contacts" style={contactStyles.container}>
+                  {CONTACTS.map((contact, index) => (
+                    <motion.div
+                      key={contact.phone}
+                      style={contactStyles.item}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 + index * 0.08 }}
+                      whileHover={{
+                        transform: "translateY(-4px)",
+                        boxShadow: "0 10px 28px rgba(2,136,209,0.12)"
+                      }}
+                    >
+                      <div style={contactStyles.left}>
+                        <div style={contactStyles.text}>
+                          <span style={contactStyles.name}>{contact.name}</span>
+                          <a
+                            href={`tel:+${contact.phone}`}
+                            style={contactStyles.phone}
+                            aria-label={`${contact.name} தொலைபேசி`}
+                          >
+                            {contact.display}
+                          </a>
+                        </div>
+                      </div>
+
+                      <div style={contactStyles.actions} aria-hidden="true" aria-label="no contact actions">
+                        {/* no extra actions */}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              <div
+                className="countdown"
+                role="timer"
+                aria-live="polite"
+                aria-label="கவுண்ட்டவுன்"
+                style={countdownStyles.container}
+              >
+                <TimeBox value={countdown.days} label="நாள்" />
+                <TimeSep />
+                <TimeBox value={countdown.hours} label="மணி" />
+                <TimeSep />
+                <TimeBox value={countdown.minutes} label="நிமி" />
+                <TimeSep />
+                <TimeBox value={countdown.seconds} label="வி" />
+              </div>
+
+              {/* Add: action row with WhatsApp + Pooja + Map */}
+              <div style={actionRowStyles.container} aria-label="இணை செயல்கள்">
+                <button
+                  style={{ ...actionRowStyles.btn, borderColor: "#25D36633" }}
+                  aria-label="வாட்ஸ்அப் RSVP"
+                  onClick={handleRSVP}
+                >
+                  <span style={actionRowStyles.iconWrap} aria-hidden="true">
+                    {/* WhatsApp SVG */}
+                    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#25D366" d="M27.6 4.4A15.8 15.8 0 1 0 4.4 27.6L3 31l3.6-1.3A15.8 15.8 0 1 0 27.6 4.4Z"/>
+                      <path fill="#fff" d="M24.4 17.8c-.2-.3-1.1-.6-1.8-.7-.5-.1-1-.1-1.4.4-.4.5-1 1.2-1.2 1.3-.2.1-.6.2-1.1 0-.5-.2-2-1-3.7-2.9-1.4-1.6-1.8-2.9-2-3.4-.2-.5 0-.8.2-1 .2-.2.5-.6.7-.9.2-.3.3-.5.4-.8.1-.3 0-.6 0-.8 0-.2-.4-1.4-.8-2-.2-.5-.5-.6-.8-.6h-.7c-.2 0-.7.1-1.1.6-.4.5-1.4 1.3-1.4 3.2 0 1.9 1.4 3.7 1.6 3.9.2.3 2.8 4.4 6.8 6.2 4 .1 4.2.1 5.2-.4 1-.5 2.3-1.7 2.4-3 .1-1.3-.1-1.3-.1-1.3Z"/>
+                    </svg>
+                  </span>
+                  <span>WhatsApp</span>
+                </button>
+               
+                {/* New: Map button */}
+                <button
+                  style={{ ...actionRowStyles.btn, borderColor: "#64b5f633" }}
+                  aria-label="வரைபடம் திறக்க"
+                  onClick={() => window.open(MAP_QUERY, "_blank")}
+                >
+                  <span style={actionRowStyles.iconWrap} aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16 3C10.9 3 7 6.9 7 12c0 6.2 7.2 14.4 8.9 16.2.6.7 1.6.7 2.2 0C17.8 26.4 25 18.2 25 12c0-5.1-3.9-9-9-9Z" fill="#64b5f6"/>
+                      <circle cx="16" cy="12" r="3.5" fill="#fff"/>
+                    </svg>
+                  </span>
+                  <span>வரைபடம்</span>
+                </button>
+              </div>
+            </motion.section>
+          </main>
+          
+          {/* ribbon that briefly appears when opening external homepage */}
+          {showRibbon && (
+            <div aria-hidden style={{position: 'fixed', left: 0, right: 0, top: 0, height: 120, background: '#ffb300', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, boxShadow: '0 6px 18px rgba(0,0,0,0.12)'}}>
+              <div style={{transform: 'translateY(0)', opacity: 1, transition: 'transform 0.4s ease, opacity 0.4s ease'}}>
+                <strong style={{fontSize: 18}}>Opening website…</strong>
+              </div>
+            </div>
+          )}
+
+          <footer className="footer" aria-label="Footer">
+            Made with <span aria-label="love">❤️</span> | <span className="footer-en">Made with love</span>
+            
+            <button
+              style={{ marginLeft: 12, padding: '6px 10px', borderRadius: 8, border: '1px solid #e0e0e0', cursor: 'pointer' }}
+              aria-label={audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
+              onClick={() => {
+                const next = !audioOn; setAudioOn(next);
+                const a = audioRef.current; if (!a) return;
+                if (next) { a.muted = false; a.play().catch(() => {}); } else { a.muted = true; a.pause(); }
+              }}
+            >
+              {audioOn ? 'ஒலி நிறுத்து' : 'ஒலி இயக்கு'}
+            </button>
+            <button
+              onClick={openHomepageWithRibbon}
+              style={{ marginLeft: 8, padding: '6px 10px', borderRadius: 8, border: '1px solid #e0e0e0', cursor: 'pointer' }}
+              aria-label="Open homepage"
+            >
+              Open site
+            </button>
+          </footer>
+          
+          {/* Floating play/pause button */}
+          <button
+            onClick={toggleFloatingAudio}
+            aria-label={audioOn ? 'Pause music' : 'Play music'}
+            style={{
+              position: 'fixed',
+              right: 16,
+              bottom: 16,
+              width: 56,
+              height: 56,
+              borderRadius: 28,
+              background: audioOn ? '#ffb300' : '#fff',
+              border: '1px solid rgba(0,0,0,0.08)',
+              boxShadow: '0 6px 18px rgba(0,0,0,0.12)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              zIndex: 1000
+            }}
+          >
+            <span style={{ fontSize: 20 }}>{audioOn ? '🔊' : '🔈'}</span>
+          </button>
+          
+          {/* Background audio (loop). Start muted autoplay (browsers allow muted autoplay),
+              then unmute on user gesture via the existing button or prompt. */}
+          <audio
+            ref={audioRef}
+            src={bgAudioUrl}
+            loop
+            preload="auto"
+            autoPlay
+            muted
+            playsInline
+            onCanPlay={() => {
+              // Try to start playback when the audio is ready. If the browser blocks
+              // audible autoplay, this will at least start the muted playback so the
+              // audio element is primed and can be unmuted on user interaction.
+              const a = audioRef.current;
+              if (a) a.play().catch(() => {});
+            }}
+            aria-hidden="true"
+          />
+        </>
+      )}
+
+      {/* Greeting Modal */}
+      <GreetingModal 
+        open={greetOpen} 
+        name={guestName} 
+        onClose={() => setGreetOpen(false)} 
+        onEnter={handleEnter} 
+      />
     </div>
   );
 }

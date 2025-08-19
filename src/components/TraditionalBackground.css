@@ -1,0 +1,361 @@
+/* Traditional Hindu Background Styles */
+.traditional-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Rangoli Patterns */
+.rangoli-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.rangoli-pattern {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.15;
+}
+
+.rangoli-1 {
+  top: 10%;
+  left: 10%;
+  width: 200px;
+  height: 200px;
+  background: 
+    radial-gradient(circle at center, 
+      transparent 20%, 
+      rgba(255, 179, 0, 0.3) 22%, 
+      transparent 24%,
+      transparent 35%,
+      rgba(229, 115, 115, 0.3) 37%,
+      transparent 39%,
+      transparent 50%,
+      rgba(129, 199, 132, 0.3) 52%,
+      transparent 54%
+    ),
+    conic-gradient(
+      from 0deg,
+      rgba(255, 107, 157, 0.2) 0deg,
+      transparent 30deg,
+      rgba(255, 179, 0, 0.2) 60deg,
+      transparent 90deg,
+      rgba(129, 199, 132, 0.2) 120deg,
+      transparent 150deg,
+      rgba(229, 115, 115, 0.2) 180deg,
+      transparent 210deg,
+      rgba(156, 39, 176, 0.2) 240deg,
+      transparent 270deg,
+      rgba(100, 181, 246, 0.2) 300deg,
+      transparent 330deg,
+      rgba(255, 107, 157, 0.2) 360deg
+    );
+  border: 2px solid rgba(255, 179, 0, 0.2);
+}
+
+.rangoli-2 {
+  top: 60%;
+  right: 15%;
+  width: 150px;
+  height: 150px;
+  background: 
+    radial-gradient(circle at center,
+      transparent 30%,
+      rgba(255, 107, 157, 0.25) 32%,
+      transparent 34%,
+      transparent 45%,
+      rgba(100, 181, 246, 0.25) 47%,
+      transparent 49%
+    ),
+    linear-gradient(45deg,
+      rgba(255, 179, 0, 0.2) 0%,
+      transparent 25%,
+      rgba(229, 115, 115, 0.2) 50%,
+      transparent 75%,
+      rgba(129, 199, 132, 0.2) 100%
+    );
+  border: 1px solid rgba(255, 107, 157, 0.2);
+}
+
+.rangoli-3 {
+  bottom: 20%;
+  left: 20%;
+  width: 120px;
+  height: 120px;
+  background: 
+    conic-gradient(
+      from 45deg,
+      rgba(156, 39, 176, 0.15) 0deg,
+      transparent 45deg,
+      rgba(255, 179, 0, 0.15) 90deg,
+      transparent 135deg,
+      rgba(229, 115, 115, 0.15) 180deg,
+      transparent 225deg,
+      rgba(100, 181, 246, 0.15) 270deg,
+      transparent 315deg,
+      rgba(156, 39, 176, 0.15) 360deg
+    );
+  border: 1px solid rgba(156, 39, 176, 0.2);
+}
+
+/* Paisley Motifs */
+.paisley-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.paisley {
+  position: absolute;
+  width: 30px;
+  height: 50px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 179, 0, 0.3) 0%,
+    rgba(229, 115, 115, 0.2) 50%,
+    rgba(255, 107, 157, 0.3) 100%
+  );
+  border-radius: 50% 0 50% 50%;
+  opacity: 0.4;
+}
+
+.paisley-1 { top: 15%; left: 5%; transform: rotate(45deg); }
+.paisley-2 { top: 25%; right: 10%; transform: rotate(-30deg); }
+.paisley-3 { top: 45%; left: 15%; transform: rotate(60deg); }
+.paisley-4 { top: 55%; right: 25%; transform: rotate(-45deg); }
+.paisley-5 { bottom: 25%; left: 10%; transform: rotate(30deg); }
+.paisley-6 { bottom: 35%; right: 15%; transform: rotate(-60deg); }
+.paisley-7 { bottom: 15%; left: 30%; transform: rotate(90deg); }
+.paisley-8 { top: 35%; right: 5%; transform: rotate(-90deg); }
+
+/* Lotus Border Elements */
+.lotus-border {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.lotus-element {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: 
+    radial-gradient(ellipse at center,
+      rgba(255, 107, 157, 0.4) 0%,
+      rgba(255, 107, 157, 0.2) 40%,
+      transparent 70%
+    );
+  border-radius: 50% 20% 50% 20%;
+  opacity: 0.5;
+}
+
+.lotus-1 { top: 10%; left: 50%; transform: rotate(0deg); }
+.lotus-2 { top: 20%; right: 20%; transform: rotate(30deg); }
+.lotus-3 { top: 50%; right: 5%; transform: rotate(60deg); }
+.lotus-4 { bottom: 30%; right: 15%; transform: rotate(90deg); }
+.lotus-5 { bottom: 10%; right: 40%; transform: rotate(120deg); }
+.lotus-6 { bottom: 5%; left: 50%; transform: rotate(150deg); }
+.lotus-7 { bottom: 15%; left: 20%; transform: rotate(180deg); }
+.lotus-8 { bottom: 40%; left: 5%; transform: rotate(210deg); }
+.lotus-9 { top: 60%; left: 10%; transform: rotate(240deg); }
+.lotus-10 { top: 40%; left: 8%; transform: rotate(270deg); }
+.lotus-11 { top: 25%; left: 15%; transform: rotate(300deg); }
+.lotus-12 { top: 15%; left: 30%; transform: rotate(330deg); }
+
+/* Kalash (Sacred Pot) Elements */
+.kalash-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.kalash {
+  position: absolute;
+  font-size: 40px;
+  opacity: 0.3;
+  filter: drop-shadow(0 0 10px rgba(255, 179, 0, 0.3));
+}
+
+.kalash-1 {
+  top: 20%;
+  right: 5%;
+}
+
+.kalash-2 {
+  bottom: 25%;
+  left: 5%;
+}
+
+.kalash::before {
+  content: '🏺';
+}
+
+/* Floating Diyas */
+.floating-diyas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-diya {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.6;
+}
+
+.diya-1 { top: 18%; left: 25%; }
+.diya-2 { top: 35%; right: 30%; }
+.diya-3 { top: 55%; left: 5%; }
+.diya-4 { bottom: 40%; right: 8%; }
+.diya-5 { bottom: 20%; left: 40%; }
+.diya-6 { top: 70%; right: 40%; }
+
+/* Sacred Geometry */
+.sacred-geometry {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.yantra {
+  position: absolute;
+  top: 40%;
+  left: 70%;
+  width: 80px;
+  height: 80px;
+  opacity: 0.1;
+  background: 
+    linear-gradient(45deg, transparent 48%, rgba(255, 179, 0, 0.5) 50%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255, 179, 0, 0.5) 50%, transparent 52%),
+    linear-gradient(0deg, transparent 48%, rgba(229, 115, 115, 0.5) 50%, transparent 52%),
+    linear-gradient(90deg, transparent 48%, rgba(229, 115, 115, 0.5) 50%, transparent 52%);
+  border: 1px solid rgba(255, 179, 0, 0.3);
+  border-radius: 10%;
+}
+
+.sri-chakra {
+  position: absolute;
+  bottom: 30%;
+  right: 30%;
+  width: 100px;
+  height: 100px;
+  opacity: 0.2;
+  background: 
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(156, 39, 176, 0.3) 20deg,
+      transparent 40deg,
+      rgba(255, 179, 0, 0.3) 60deg,
+      transparent 80deg,
+      rgba(229, 115, 115, 0.3) 100deg,
+      transparent 120deg,
+      rgba(100, 181, 246, 0.3) 140deg,
+      transparent 160deg,
+      rgba(129, 199, 132, 0.3) 180deg,
+      transparent 200deg,
+      rgba(255, 107, 157, 0.3) 220deg,
+      transparent 240deg,
+      rgba(255, 179, 0, 0.3) 260deg,
+      transparent 280deg,
+      rgba(156, 39, 176, 0.3) 300deg,
+      transparent 320deg,
+      rgba(229, 115, 115, 0.3) 340deg,
+      transparent 360deg
+    );
+  border-radius: 50%;
+  border: 1px solid rgba(156, 39, 176, 0.2);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .rangoli-1 {
+    width: 120px;
+    height: 120px;
+    top: 12%;
+    left: 5%;
+  }
+  
+  .rangoli-2 {
+    width: 100px;
+    height: 100px;
+    top: 65%;
+    right: 10%;
+  }
+  
+  .rangoli-3 {
+    width: 80px;
+    height: 80px;
+    bottom: 25%;
+    left: 15%;
+  }
+  
+  .paisley {
+    width: 20px;
+    height: 35px;
+  }
+  
+  .lotus-element {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .kalash {
+    font-size: 28px;
+  }
+  
+  .floating-diya {
+    font-size: 16px;
+  }
+  
+  .yantra {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .sri-chakra {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rangoli-1 {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .rangoli-2 {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .rangoli-3 {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .paisley {
+    width: 15px;
+    height: 25px;
+  }
+  
+  .lotus-element {
+    width: 15px;
+    height: 15px;
+  }
+  
+  .kalash {
+    font-size: 20px;
+  }
+  
+  .floating-diya {
+    font-size: 14px;
+  }
+}

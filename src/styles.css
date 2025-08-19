@@ -7,6 +7,14 @@
   --text: #333;
   --card: #fff3e0;
   --footer: #ffe0b2;
+  /* Traditional South Indian Colors */
+  --temple-gold: #ffd700;
+  --temple-red: #dc143c;
+  --temple-orange: #ff8c00;
+  --kumkum-red: #e91e63;
+  --turmeric-yellow: #ffcc02;
+  --peacock-blue: #005f69;
+  --silk-sari-pink: #ff6b9d;
   /* JS sets this to 1dvh in px on mobile */
   --app-dvh: 1vh;
 }
@@ -24,7 +32,18 @@ body, html, #root {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  background: radial-gradient(circle at 60% 20%, var(--primary) 0%, var(--bg) 70%);
+  background: 
+    radial-gradient(circle at 20% 80%, var(--temple-orange) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, var(--peacock-blue) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, var(--silk-sari-pink) 0%, transparent 50%),
+    linear-gradient(135deg, var(--turmeric-yellow) 0%, var(--bg) 50%, var(--kumkum-red) 100%);
+  /* Traditional Kolam Pattern Background */
+  background-image: 
+    radial-gradient(circle at 25% 25%, transparent 20%, rgba(255, 179, 0, 0.05) 21%, transparent 22%),
+    radial-gradient(circle at 75% 75%, transparent 20%, rgba(220, 20, 60, 0.05) 21%, transparent 22%),
+    radial-gradient(circle at 75% 25%, transparent 20%, rgba(0, 95, 105, 0.05) 21%, transparent 22%),
+    radial-gradient(circle at 25% 75%, transparent 20%, rgba(255, 108, 157, 0.05) 21%, transparent 22%);
+  background-size: 80px 80px, 120px 120px, 100px 100px, 60px 60px;
 }
 
 .bg-shapes {
@@ -70,17 +89,45 @@ body, html, #root {
   width: 120px;
   height: 120px;
 }
-/* Tamil title / header styling */
+/* Tamil title / header styling with traditional enhancement */
 .tamil-title {
-  font-family: 'Merriweather', 'Noto Serif', 'Times New Roman', serif;
+  font-family: 'Merriweather', 'Noto Serif Tamil', 'Noto Serif', 'Times New Roman', serif;
   font-style: italic;
   font-weight: 700;
   font-size: 2.6rem;
-  color: #2e3a3f;
+  background: linear-gradient(45deg, var(--temple-gold), var(--kumkum-red), var(--temple-orange));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin: 0.4rem 0 0.8rem 0;
   line-height: 1.05;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(0 0 10px rgba(255, 179, 0, 0.3));
+  position: relative;
+}
+
+.tamil-title::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: 
+    conic-gradient(from 0deg, transparent, rgba(255, 179, 0, 0.1), transparent),
+    conic-gradient(from 120deg, transparent, rgba(220, 20, 60, 0.1), transparent),
+    conic-gradient(from 240deg, transparent, rgba(255, 140, 0, 0.1), transparent);
+  border-radius: 50%;
+  animation: rotate 20s linear infinite;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Center the second word of the Tamil title on small screens */
@@ -246,6 +293,7 @@ body.no-scroll { overflow: hidden; }
   z-index: 1;
 }
 
+/* Enhanced gallery cards with traditional styling */
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -253,36 +301,87 @@ body.no-scroll { overflow: hidden; }
   justify-content: center;
   margin: 2.5rem 0 1.5rem 0;
 }
+
 .gallery-card {
   width: 90px;
   height: 90px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: linear-gradient(135deg, var(--temple-gold), var(--temple-orange), var(--kumkum-red));
   border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 
+    0 8px 24px rgba(0,0,0,0.15),
+    inset 0 2px 5px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   font-size: 2.5rem;
   user-select: none;
-}
-.gallery-emoji {
-  font-size: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
+.gallery-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 20%, transparent 21%),
+    radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.15) 15%, transparent 16%);
+  pointer-events: none;
+}
+
+.gallery-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 
+    0 16px 40px rgba(0,0,0,0.2),
+    0 0 20px rgba(255, 179, 0, 0.4);
+  filter: brightness(1.1);
+}
+
+.gallery-emoji {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  position: relative;
+  z-index: 1;
+}
+
+/* Enhanced footer with traditional elements */
 .footer {
-  background: var(--footer);
+  background: linear-gradient(135deg, var(--temple-gold), var(--footer), var(--temple-orange));
   text-align: center;
   padding: 1.2rem 0 1rem 0;
   font-size: 1.1rem;
-  color: var(--secondary);
+  color: var(--temple-red);
   margin-top: 2rem;
-  border-top: 1px solid #ffe0b2;
+  border-top: 3px solid var(--kumkum-red);
+  position: relative;
+  box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3);
 }
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--temple-gold) 0px,
+    var(--kumkum-red) 10px,
+    var(--temple-orange) 20px,
+    var(--peacock-blue) 30px
+  );
+}
+
 .footer-en {
   font-size: 0.95rem;
-  color: #888;
+  color: #666;
   margin-left: 0.5rem;
 }
 
@@ -293,39 +392,173 @@ main {
   justify-content: center;
 }
 
+/* Enhanced event card with traditional patterns */
 .event-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 25px;
+  padding: 2rem;
+  margin: 1rem;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    inset 0 1px 3px rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 179, 0, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
+.event-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 179, 0, 0.05) 2px, rgba(255, 179, 0, 0.05) 4px),
+    repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(220, 20, 60, 0.03) 2px, rgba(220, 20, 60, 0.03) 4px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.event-card::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--temple-gold), var(--kumkum-red), var(--temple-orange), var(--peacock-blue));
+  border-radius: 27px;
+  z-index: -2;
+  animation: borderGlow 4s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+/* Enhanced mobile optimizations */
 @media (max-width: 600px) {
-  .event-card, .modal-content {
+  .app-bg {
+    background-size: 40px 40px, 60px 60px, 50px 50px, 30px 30px;
+  }
+  
+  .event-card {
+    width: 95vw;
+    padding: 1.5rem 1rem;
+    margin: 0.5rem;
+    border-radius: 20px;
+  }
+  
+  .modal-content {
     width: 95vw;
     padding: 1rem;
+    border-radius: 15px;
   }
+  
   .gallery-card {
     width: 70px;
     height: 70px;
     font-size: 2rem;
   }
+  
   .hero-svg {
     width: 90px;
     height: 90px;
   }
+  
   .tamil-title {
     font-size: 2rem;
   }
+  
+  .tamil-title::before {
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+  }
+  
   .event-details {
     padding: 0 0.6rem;
   }
+  
   .event-details .hosts, .event-details .hostsEn {
     font-size: 22px !important;
   }
+  
   .contacts {
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Mobile-specific traditional enhancements */
+  .countdown {
+    gap: 0.3rem;
+  }
+  
+  .time-box {
+    min-width: 70px !important;
+    padding: 10px 14px !important;
+  }
+  
+  .time-value {
+    font-size: 32px !important;
+  }
+  
+  .time-label {
+    font-size: 10px !important;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 601px) and (max-width: 900px) {
+  .event-card {
+    max-width: 90vw;
+    padding: 1.8rem;
+  }
+  
+  .tamil-title {
+    font-size: 2.3rem;
+  }
+  
+  .contacts {
+    max-width: 600px;
+    gap: 18px;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 400px) {
+  .tamil-title {
+    font-size: 1.8rem;
+  }
+  
+  .event-card {
+    padding: 1rem 0.8rem;
+    margin: 0.3rem;
+  }
+  
+  .time-box {
+    min-width: 60px !important;
+    padding: 8px 10px !important;
+  }
+  
+  .time-value {
+    font-size: 28px !important;
+  }
+  
+  .contacts {
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
   }
 }
 

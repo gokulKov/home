@@ -1,0 +1,126 @@
+/* Cultural Elements Styles - Optimized */
+.cultural-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* Reduced Diyas */
+.enhanced-diyas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.enhanced-diya {
+  position: absolute;
+  font-size: 20px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.diya-float-1 { top: 15%; left: 10%; }
+.diya-float-2 { top: 30%; right: 15%; }
+.diya-float-3 { bottom: 35%; left: 12%; }
+.diya-float-4 { bottom: 20%; right: 18%; }
+
+/* Essential Sacred Hindu Symbols */
+.sacred-symbols {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.om-symbol {
+  position: absolute;
+  top: 8%;
+  right: 8%;
+  font-size: 32px;
+  color: #ff8f00;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Minimal Traditional Flowers */
+.traditional-flowers {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.flower {
+  position: absolute;
+  font-size: 18px;
+  opacity: 0.6;
+}
+
+.flower-1 { top: 25%; left: 25%; }
+.flower-2 { top: 40%; right: 30%; }
+.flower-3 { top: 65%; left: 20%; }
+.flower-4 { bottom: 30%; right: 25%; }
+.flower-5 { top: 55%; left: 8%; }
+.flower-6 { bottom: 45%; right: 12%; }
+
+/* Simple Kalash */
+.kalash-simple {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  opacity: 0.7;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .enhanced-diya {
+    font-size: 16px;
+  }
+  
+  .om-symbol {
+    font-size: 24px;
+    top: 6%;
+    right: 6%;
+  }
+  .flower {
+    font-size: 14px;
+  }
+  
+  .kalash-simple {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-diya {
+    font-size: 14px;
+  }
+  
+  .om-symbol {
+    font-size: 20px;
+  }
+  
+  .flower {
+    font-size: 12px;
+  }
+  
+  .kalash-simple {
+    font-size: 18px;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .enhanced-diya,
+  .om-symbol,
+  .flower,
+  .kalash-simple {
+    animation: none;
+    transform: none;
+  }
+}
